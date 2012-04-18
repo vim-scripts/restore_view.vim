@@ -2,7 +2,7 @@
 "      Language: vim script
 "    Maintainer: Yichao Zhou (broken.zhou AT gmail dot com)
 "       Created: 2012-02-27 16:12:12
-" Last Modified: 2012 Apr 18 13:26:20
+" Last Modified: 2012 Apr 18 14:06:11
 "   Description: 
 "       This is a simple script to autosave cursor position and fold
 "       information using vim's mkview.  Although you can easily do this job by
@@ -43,7 +43,14 @@ function! MakeViewCheck()
     if &modifiable == 0 | return 0 | endif
     if len($TEMP) && expand('%:p:h') == $TEMP | return 0 | endif
     if len($TMP) && expand('%:p:h') == $TMP | return 0 | endif
-    if index(g:skipview_files, expand('%')) >= 0 | return 0 | endif
+
+    let file_name = expand('%:p')
+    for ifiles in g:skipview_files
+        if file_name =~ ifiles
+            return 0
+        endif
+    endfor
+
     return 1
 endfunction
 
