@@ -1,7 +1,7 @@
 "          FILE: restore_view.vim
 "      Language: vim script
 "    Maintainer: Yichao Zhou (broken.zhou AT gmail dot com)
-"       Version: 1.2
+"       Version: 1.3
 "   Description: 
 "       This is a simple script to autosave cursor position and fold
 "       information using vim's mkview.  Although you can easily do this job by
@@ -25,6 +25,7 @@
 "
 "       Most of code is from wiki.
 
+
 if exists("g:loaded_restore_view")
     finish
 endif
@@ -35,6 +36,7 @@ if !exists("g:skipview_files")
 endif
 
 function! MakeViewCheck()
+    if &l:diff | return 0 | endif
     if &buftype != '' | return 0 | endif
     if expand('%') =~ '\[.*\]' | return 0 | endif
     if empty(glob(expand('%:p'))) | return 0 | endif
@@ -55,6 +57,6 @@ endfunction
 augroup AutoView
     autocmd!
     " Autosave & Load Views.
-    autocmd BufWritePost,BufWinLeave ?* if MakeViewCheck() | silent! mkview | endif
+    autocmd BufWritePre,BufWinLeave ?* if MakeViewCheck() | silent! mkview | endif
     autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | endif
 augroup END
